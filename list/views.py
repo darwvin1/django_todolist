@@ -40,3 +40,12 @@ def delete_todo(request, todo_id):
         return JsonResponse({'status': 'success'})
     except Todo.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'تودو مورد نظر پیدا نشد.'})
+
+def edit_todo(request, todo_id, todo_text):
+    try:
+        todo = Todo.objects.get(id=todo_id)
+        todo.title = todo_text
+        todo.save()
+        return JsonResponse({'status': 'success'})
+    except Todo.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'تودو مورد نظر پیدا نشد.'})

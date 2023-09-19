@@ -16,7 +16,7 @@ body {
   margin-top: 20px;
   height: 30px;
 }
-.input-section input[type="text"] {
+.todoInput {
   flex-grow: 1;
   padding: 16px;
   border: none;
@@ -29,14 +29,14 @@ body {
   -moz-box-shadow: 9px 21px 30px -19px rgba(0, 0, 0, 0.63);
   box-shadow: 9px 21px 30px -19px rgba(0, 0, 0, 0.63);
 }
-.input-section input[type="text"]::placeholder {
+.todoInput::placeholder {
   color: #ddd;
 }
-.input-section input[type="text"]:focus {
+.todoInput:focus {
   outline: none;
   background-color: #555;
 }
-.input-section button {
+button {
   margin-left: 10px;
   padding: 16px 23px;
   border: none;
@@ -50,11 +50,11 @@ body {
   -moz-box-shadow: 9px 21px 30px -19px rgba(0, 0, 0, 0.63);
   box-shadow: 9px 21px 30px -19px rgba(0, 0, 0, 0.63);
 }
-.input-section button:hover {
+button:hover {
   outline: none;
   background-color: #555;
 }
-.input-section button[type="text"]::placeholder {
+button[type="text"]::placeholder {
   color: #ddd;
 }
 .add {
@@ -78,6 +78,7 @@ body {
 }
 .todo-list li {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   padding: 7px 30px;
   background-color: rgb(38 37 37);
