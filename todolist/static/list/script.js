@@ -58,20 +58,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-  const addBtn = document.querySelector('#addBtn');
-  addBtn.addEventListener('click', (e) => {
-      // e.preventDefault();
-
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', '/');
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-      xhr.onreadystatechange = () => {
-          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-              location.reload();
-          }
-      };
-
-      xhr.send(new URLSearchParams(new FormData(myForm)).toString());
-  });
 });

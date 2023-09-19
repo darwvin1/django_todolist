@@ -1,0 +1,71 @@
+{% extends "./base.html" %}
+{% block page_title %}
+Home
+{% endblock page_title %}
+{% block content %}
+<div class="todo-app">
+    <div class="user-area">
+    </div>
+    <form class="input-section" method="post" id="myForm">
+      {% csrf_token %}
+      {{form.title}}
+      <button id="addBtn" type="button" class="add">Add</button>
+    </form>
+    <div class="todos">
+      <ul class="todo-list">
+        {% for todo in todos %}
+          <li class="li">
+            <input class="form-check-input" type="checkbox" value={{todo.id}} {% if todo.is_done %}checked{% endif %}>
+            <label class="form-check-label" for="inlineCheckbox1"></label>
+            <span class="todo-text">{{todo.title}}</span>
+            <span class="todo-text">{{todo.created_at}}</span>
+            <span class="span-button"><i class="fa-solid fa-trash" data-value={{todo.id}}></i></span>
+            <span class="span-button"><i class="fa-solid fa-pen"></i></span>
+          </li>
+        {% endfor %}
+      </ul>            
+    </div>
+  </div>
+  {% load static %}
+  <script src={% static "list/script.js" %}>
+  </script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous">
+  $(document).ready(function () {
+    $('#addBtn').on('click', function (event) {
+      event.preventDefault();
+      console.log("fafs")
+      $.ajax({
+        url: '/',
+        type: 'POST',
+        data: $(this).serialize(),
+        dataType: 'json',
+        success: function (data) {
+          console.log(data);
+          // اضافه کردن todo به لیست بدون رفرش صفحه
+          if (data.status === 'ok') {
+            var todoText = $('#id_title').val();
+            var todoCreatedAt = new Date().toLocaleString();
+            var todoId = data.todo_id; // باید todo_id را از پاسخ سرور دریافت کنید
+  
+            var todoItem = `
+              <li class="li">
+                <input class="form-check-input" type="checkbox" value="${todoId}">
+                <label class="form-check-label" for="inlineCheckbox1"></label>
+                <span class="todo-text">${todoText}</span>
+                <span class="todo-text">${todoCreatedAt}</span>
+                <span class="span-button"><i class="fa-solid fa-trash" data-value="${todoId}"></i></span>
+                <span class="span-button"><i class="fa-solid fa-pen"></i></span>
+              </li>
+            `;
+  
+            $('.todo-list').append(todoItem);
+            $('#id_title').val(''); // پاک کردن محتوای فیلد ورودی
+          }
+        },
+      });
+    });
+  });
+  
+</script>
+
+{% endblock content %}
