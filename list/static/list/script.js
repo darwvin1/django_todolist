@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         e.target.parentElement.parentElement.appendChild(input);
         const updateBtn = document.querySelector("#addBtn").cloneNode();
         updateBtn.textContent = "Update";
+        updateBtn.id = "updateBtn"
         updateBtn.setAttribute("data-value", todoID);
         e.target.parentElement.parentElement.appendChild(updateBtn);
         updateBtn.addEventListener('click', ()=>{
@@ -56,5 +57,21 @@ document.addEventListener("DOMContentLoaded", () => {
         })
       }
     });
+  });
+  const addBtn = document.querySelector('#addBtn');
+  addBtn.addEventListener('click', (e) => {
+      // e.preventDefault();
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/');
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+              location.reload();
+          }
+      };
+
+      xhr.send(new URLSearchParams(new FormData(myForm)).toString());
   });
 });

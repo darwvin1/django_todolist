@@ -6,10 +6,10 @@ Home
 <div class="todo-app">
     <div class="user-area">
     </div>
-    <form class="input-section" method="post">
+    <form class="input-section" method="post" id="myForm">
       {% csrf_token %}
       {{form.title}}
-      <button id="addBtn" type="submit" class="add">Add</button>
+      <button id="addBtn" type="button" class="add">Add</button>
     </form>
     <div class="todos">
       <ul class="todo-list">
@@ -28,6 +28,22 @@ Home
   </div>
   {% load static %}
   <script src={% static "list/script.js" %}>
-    
   </script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous">
+  $(document).ready(function () {
+    $('#myForm').on('submit', function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: "/",
+            type: "POST",
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: (data) => {
+              console.log(data)
+            }
+        });
+    });
+});
+</script>
+
 {% endblock content %}

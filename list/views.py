@@ -3,11 +3,16 @@ from .forms import TodoForm
 from .models import Todo
 from django.http import JsonResponse
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 def todo_list(request):
     if request.method == 'POST':
         form = TodoForm(request.POST)
         if form.is_valid():
             form.save()
+            if is_ajax(request):
+                return JsonResponse({'status': 'ok'}, status=200)
             return redirect('todo_list')
     else:
         form = TodoForm()
