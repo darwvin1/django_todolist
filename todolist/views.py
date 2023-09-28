@@ -2,25 +2,31 @@ from django.shortcuts import render, redirect
 from .forms import TodoForm
 from .models import Todo
 from django.http import JsonResponse
+from users.forms import ProfileForm
+from django.views.decorators.csrf import csrf_exempt
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
+@csrf_exempt
 def todo_list(request):
     if request.method == 'POST':
         form = TodoForm(request.POST)
         if form.is_valid():
-            form.save()
+            todo = form.save(commit=False)
+            todo.user = request.user
+            todo.save()
             if is_ajax(request):
                 return JsonResponse({'status': 'ok'}, status=200)
-            return redirect('todo_list')
     else:
         form = TodoForm()
-
-    todos = Todo.objects.all()
+    print(request.user.todos.all())
+    todos = request.user.todos.all()
+    picture_form = ProfileForm()
     context = {
         'form': form,
-        'todos': todos
+        'todos': todos,
+        "picture_form": picture_form,
     }
     return render(request, 'todo.html', context)
 

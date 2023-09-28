@@ -1,0 +1,75 @@
+{% extends "./base.html" %}
+{% block page_title %}
+Login/Register
+{% endblock page_title%}
+{% block content %}
+<style>
+    label{
+        color: #fff;
+    }
+
+    button{
+        margin-top: 2rem;
+        margin-left: 45%:
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10%;
+    }
+
+    .login-form,
+    .register-form {
+        width: 45%;
+    }
+
+    .login-form form,
+    .register-form form {
+        padding: 20px;
+        background-color: rgb(38, 38, 38) !important;
+        border-radius: 5px;
+    }
+
+    .register-form {
+        margin-left: 10px;
+    }
+    
+    .space-between{
+        border-right: 1px solid #ccc;
+        padding-left: 1rem;
+    }
+    @media only screen and (max-width: 600px) {
+        .container{
+            display: block;
+        }
+        .register-form, .login-form{
+            width: 80%;
+        }
+        .register-form{
+            margin-top:3rem;
+            margin-left:0;
+        }
+        input{
+            display:block;
+        }
+    }
+</style>
+<div class="container">
+    <div class="login-form">
+        <form method="post" action={% url "users:login" %}>
+            {% csrf_token %}
+            {{ login_form.as_p }}
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <div class="space-between"></div>
+    <div class="register-form">
+        <form method="post" action={% url "users:register" %}>
+            {% csrf_token %}
+            {{ register_form.as_p }}
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
