@@ -1,103 +1,60 @@
 {% extends "./base.html" %}
-{% block page_title %}
-Home
-{% endblock page_title %}
+ {% block page_title %} Home {% endblock page_title%}
 {% block content %}
 <div class="todo-app">
-    <div class="user-area">
-      {% if user.id%}
-      <div class="user-img">
-        <img src='media/{{request.user.profile_picture}}' >
-        <div class="user-username">{{ user.username }}</div>
-        <form method="POST" enctype="multipart/form-data" action="{% url 'users:set-profile' %}">
-          {% csrf_token %}
-          {{ picture_form.as_p }}
-        </form>
-      </div>
-      {% else %}
-      <div class="user"><a class="user-link" href="/user">SignUp/Login</a></div>
-      {% endif %}
+  <div class="user-area">
+    {% if user.id%}
+    <div class="user-img">
+      <img src="media/{{request.user.profile_picture}}" />
+      <div class="user-username">{{ user.username }}</div>
+      <form
+        method="POST"
+        enctype="multipart/form-data"
+        action="{% url 'users:set-profile' %}"
+      >
+        {% csrf_token %} {{ picture_form.as_p }}
+      </form>
     </div>
-    <div class="input-section" id="myForm">
-      {% csrf_token %}
-      {{ form.title }}
-      <button id="addBtn" type="button" class="add">Add</button>
-    </div>
-    <div class="todos">
-      <ul class="todo-list">
-        {% for todo in todos %}
-          <li class="li">
-            <input class="form-check-input" type="checkbox" value="{{ todo.id }}" {% if todo.is_done %}checked{% endif %}>
-            <label class="form-check-label" for="inlineCheckbox1"></label>
-            <span class="todo-text">{{ todo.title }}</span>
-            <span class="todo-text">{{ todo.created_at }}</span>
-            <span class="span-button"><i class="fa-solid fa-trash" data-value="{{ todo.id }}"></i></span>
-            <span class="span-button"><i class="fa-solid fa-pen"></i></span>
-          </li>
-        {% endfor %}
-      </ul>            
-    </div>
+    {% else %}
+    <div class="user"><a class="user-link" href="/user">SignUp/Login</a></div>
+    {% endif %}
   </div>
-  {% load static %}
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  <script src="{% static 'list/script.js' %}"></script>
-  <script>
-    {% verbatim %}
-    $(document).ready( () => {
-      $('#addBtn').on('click', event =>  {
-        event.preventDefault();
-        $(document).ready(function() {
-          $('#addBtn').click(function() {
-            var title = $('#id_title').val();
-            var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
-            
-            var formData = {
-              title: title,
-              csrfmiddlewaretoken: csrfToken
-            };
-            
-            $.ajax({
-              url: '/',  // جایگزین کنید با آدرس URL مناسب برای ارسال فرم
-              type: 'POST',
-              data: formData,
-              beforeSend: function(xhr, settings) {
-                xhr.setRequestHeader("X-CSRFToken", csrfToken);
-              },        
-              success: data => {
-                console.log(data);
-                if (data.status === 'ok') {
-                  const todoText = $('#id_title').val();
-                  const todoCreatedAt = new Date().toLocaleString();
-                  const todoId = data.todo_id;
-                  const todoItem = `
-                    <li class="li">
-                      <input class="form-check-input" type="checkbox" value="${todoId}">
-                      <label class="form-check-label" for="inlineCheckbox1"></label>
-                      <span class="todo-text">${todoText}</span>
-                      <span class="todo-text">${todoCreatedAt}</span>
-                      <span class="span-button"><i class="fa-solid fa-trash" data-value="${todoId}"></i></span>
-                      <span class="span-button"><i class="fa-solid fa-pen"></i></span>
-                    </li>
-                  `;
-        
-                  $('.todo-list').append(todoItem);
-                  $('#id_title').val(''); // پاک کردن محتوای فیلد ورودی
-              }
-            },
-              error: function(xhr, status, error) {
-                alert("Error occurred. Please try again.")
-              }
-            });
-          });
-        });
-      });
-    });
-    document.querySelector(".user-img img").addEventListener('click', e=>{document.getElementById("id_profile_picture").click()
-})
-document.getElementById('id_profile_picture').addEventListener('change', function() {
-  document.querySelector('.user-img form').submit();
-});
-
-    {% endverbatim %}
-  </script>
+  <div class="input-section" id="myForm">
+    {% csrf_token %} {{ form.title }}
+    <button id="addBtn" type="button" class="add">Add</button>
+  </div>
+  <div class="todos">
+    <ul class="todo-list">
+      {% for todo in todos %}
+      <li class="li">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value="{{ todo.id }}"
+          id = "{{ todo.id }}"
+          {% if todo.is_done %} checked {% endif %}
+        />
+        <label class="form-check-label" for="{{todo.id}}"></label>
+        <span class="todo-text">{{ todo.title }}</span>
+        <span class="todo-text">{{ todo.created_at }}</span>
+        <span class="span-button"
+          ><i class="fa-solid fa-trash" data-value="{{ todo.id }}"></i
+        ></span>
+        <span class="span-button"><i class="fa-solid fa-pen"></i></span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% load static %}
+<script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"
+></script>
+<script src="{% static 'list/script.js' %}"></script>
+<script>
+      {% verbatim %}      
+      {% endverbatim %}
+</script>
 {% endblock content %}

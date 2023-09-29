@@ -11,13 +11,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Todo',
-            fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=300, verbose_name='عنوان')),
-                ('is_done', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-            ],
-        ),
     ]
